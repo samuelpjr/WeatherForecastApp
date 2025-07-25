@@ -8,7 +8,7 @@
 import Foundation
 
 enum WeatherApiEndPoint {
-    static let apiKey = "585a3098414bb199c64b2c941ff4feae"
+    static let apiKey = "API KEY HERE"
 
     case locationBy(city: String)
     case currentForecast(lat: Double, lon: Double)
