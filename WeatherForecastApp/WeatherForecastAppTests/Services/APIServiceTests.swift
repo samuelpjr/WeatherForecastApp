@@ -57,7 +57,7 @@ final class APIServiceTests: XCTestCase {
         MockURLProtocol.stubResponseData = mockJSON
         MockURLProtocol.stubStatusCode = 200
 
-        let endpoint = WeatherApiEndPoint.currentForecast(lat: 0, lon: 0)
+        let endpoint = WeatherApiEndPoint.currentForecast(Coordinates(latitude: 0, longitude: 0))
 
         // When
         let result: CurrentForecastModel = try await apiService.request(endpoint: endpoint)
@@ -93,7 +93,7 @@ final class APIServiceTests: XCTestCase {
         MockURLProtocol.stubResponseData = mockJSON
         MockURLProtocol.stubStatusCode = 404
 
-        let endpoint = WeatherApiEndPoint.currentForecast(lat: 0, lon: 0)
+        let endpoint = WeatherApiEndPoint.currentForecast(Coordinates(latitude: 0, longitude: 0))
 
         // When/Then
         do {
@@ -119,7 +119,7 @@ final class APIServiceTests: XCTestCase {
         MockURLProtocol.stubResponseData = badJSON
         MockURLProtocol.stubStatusCode = 200
 
-        let endpoint = WeatherApiEndPoint.currentForecast(lat: 0, lon: 0)
+        let endpoint = WeatherApiEndPoint.currentForecast(Coordinates(latitude: 0, longitude: 0))
 
         // When/Then
         do {

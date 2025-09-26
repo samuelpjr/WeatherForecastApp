@@ -10,23 +10,25 @@ import XCTest
 
 
 @MainActor
-final class MainWeatherViewModelTests: XCTestCase {
+final class MainWeatherViewModelTests: XCTestCase, Sendable {
     
     var mockUseCase: MockWeatherUseCase!
     var viewModel: MainWeatherViewModel!
     
-    @MainActor
-    override func setUp() {
-        super.setUp()
-        mockUseCase = MockWeatherUseCase()
-        viewModel = MainWeatherViewModel(getCurrentWeatherUseCase: mockUseCase!)
+    
+    override func setUp() async throws {
+        try await super.setUp()
+        await MainActor.run {
+            mockUseCase = MockWeatherUseCase()
+            viewModel = MainWeatherViewModel(getCurrentWeatherUseCase: mockUseCase!)
+        }
     }
 
-    @MainActor
-    override func tearDown() {
+    
+    override func tearDown() async throws {
         mockUseCase = nil
         viewModel = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     

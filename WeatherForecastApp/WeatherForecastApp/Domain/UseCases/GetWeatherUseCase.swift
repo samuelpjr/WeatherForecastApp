@@ -27,18 +27,20 @@ class GetWeatherUseCase: GetWeatherUseCaseProtocol {
 
     func executeCurrent(_ city: (lat: Double, lon: Double)? = nil) async throws -> CurrentForecastModel {
         let locale = try await locationHandler(city)
-        return try await weatherRepository.fetchCurrentForecastBy(coordinates: WeatherApiEndPoint.currentForecast(lat: locale.lat, lon: locale.lon))
+        let coordinates = Coordinates(latitude: locale.lat, longitude: locale.lon)
+        return try await weatherRepository.fetchCurrentForecastBy(coordinates: WeatherApiEndPoint.currentForecast(coordinates))
     }
     
     func executeDaily(_ city: (lat: Double, lon: Double)? = nil) async throws -> DailyForecastModel {
         let locale = try await locationHandler(city)
-        return try await weatherRepository.fetchDailyForecastBy(coordinates: .dailyForecast(latitude: locale.lat, longitude: locale.lon))
+        let coordinates = Coordinates(latitude: locale.lat, longitude: locale.lon)
+        return try await weatherRepository.fetchDailyForecastBy(coordinates: .dailyForecast(coordinates))
     }
     
     func executeHourly(_ city: (lat: Double, lon: Double)? = nil) async throws -> HourlyForecastModel {
         let locale = try await locationHandler(city)
-
-        return try await weatherRepository.fetchHourlyForecastBy(coordinates: .hourlyForecast(lat: locale.lat, lon: locale.lon))
+        let coordinates = Coordinates(latitude: locale.lat, longitude: locale.lon)
+        return try await weatherRepository.fetchHourlyForecastBy(coordinates: .hourlyForecast(coordinates))
     }
     
     func executeLocation(for city: String) async throws -> [LocationByCityModel] {

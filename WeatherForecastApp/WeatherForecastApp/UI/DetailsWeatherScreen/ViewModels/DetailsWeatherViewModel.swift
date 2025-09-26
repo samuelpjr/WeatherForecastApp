@@ -43,23 +43,23 @@ final class DetailsWeatherViewModel {
         self.targetDay = targetDay
     }
     
-    func fetchData(_ cityLocation: (lat: Double, lon: Double)? = nil) {
+    func fetchData(_ cityLocation: (lat: Double, lon: Double)? = nil) async {
         viewState = .loading
-        Task {
-            do {
-                
-                let currentForecast = try await useCase.executeCurrent(cityLocation)
-                let dailyForecast = try await useCase.executeDaily(cityLocation)
-                let hourlyForecast = try await useCase.executeHourly(cityLocation)
-               
-                await populateData(currentForecast, dailyForecast, hourlyForecast)
-                
-                self.viewState = .loaded
-            } catch {
-                self.errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
-                self.viewState = .error((error as? LocalizedError)?.errorDescription ?? error.localizedDescription)
-            }
+        
+        do {
+            
+            let currentForecast = try await useCase.executeCurrent(cityLocation)
+            let dailyForecast = try await useCase.executeDaily(cityLocation)
+            let hourlyForecast = try await useCase.executeHourly(cityLocation)
+            
+            await populateData(currentForecast, dailyForecast, hourlyForecast)
+            
+            self.viewState = .loaded
+        } catch {
+            self.errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+            self.viewState = .error((error as? LocalizedError)?.errorDescription ?? error.localizedDescription)
         }
+        
     }
     
     private func populateData(_ current: CurrentForecastModel, _ daily: DailyForecastModel, _ hourly: HourlyForecastModel) async {

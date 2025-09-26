@@ -11,48 +11,51 @@ import SwiftUI
 @testable import WeatherForecastApp
 
 @MainActor
-final class MainWeatherViewUITests: XCTestCase {
-    var app: XCUIApplication!
-    
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-        app = XCUIApplication()
-        app.launch()
-    }
+final class MainWeatherViewUITests: XCTestCase, Sendable {
     
     func testSearchBar_ShouldShowTextFieldAndSearchButton() {
+        let app = XCUIApplication()
+        app.launch()
+
         let searchIcon = app.images["SearchIcon"]
         XCTAssertTrue(searchIcon.waitForExistence(timeout: 5))
-        
         searchIcon.tap()
-        
+
         let searchTextField = app.textFields["SearchTextField"]
         XCTAssertTrue(searchTextField.exists)
-        
         searchTextField.tap()
         searchTextField.typeText("Toronto")
-        
+
         let searchButton = app.buttons["SearchButton"]
         XCTAssertTrue(searchButton.exists)
-        
         searchButton.tap()
-        
+
         XCTAssertTrue(searchIcon.waitForExistence(timeout: 2))
+
+        let locationLabel = app.staticTexts["Toronto, Ontario CA"]
+        XCTAssertTrue(locationLabel.exists)
+        locationLabel.tap()
+
+//        print(app.debugDescription)
         
-        app.buttons["SearchButton"].tap()
-        app.staticTexts["Toronto, Ontario CA"].tap()
+        let labels = ["Downtown Toronto", "21°", "Clear Sky", "Clear Sky"]
+
+        let matches = app.staticTexts.matching(identifier: "currentWeatherCardIdentifier")
+        let count = matches.count
         
-//        let card = app.otherElements["CurrentWeatherCard"]
-//        XCTAssertTrue(card.waitForExistence(timeout: 2))
+        XCTAssertEqual(count, 3)
         
-//        let cityName = app.textViews["MainViewCityName"]
-//        XCTAssertTrue(cityName.exists)
-//        XCTAssertEqual(cityName.label, "Downtown Toronto")
+        for index in 0..<count {
+            let element = matches.element(boundBy: index)
+            print(element.label)
+            XCTAssertEqual(element.label, labels[index])
+        }
+        
     }
     
-    
     func testDailyForecastRow_ShowsCorrectData() {
-        
+        let app = XCUIApplication()
+        app.launch()
         let listButton = app.buttons["ListButton"]
         XCTAssertTrue(listButton.waitForExistence(timeout: 2.0))
         XCTAssertTrue(listButton.exists)
@@ -60,10 +63,11 @@ final class MainWeatherViewUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["MinMaxTemp"].exists)
     }
     
-    @MainActor
-    func test_LaunchApp_GoToDetailsPage_BackTo_MainPAge() throws {
-        
-        let listButton = app.buttons["Fri, 🥶 15°  -  24° 🥵"].images["WeatherIcon"]
+    
+    func test_LaunchApp_GoToDetailsPage_BackTo_MainPAge()  {
+        let app = XCUIApplication()
+        app.launch()
+        let listButton = app.buttons["ListButton"].firstMatch
         XCTAssertTrue(listButton.waitForExistence(timeout: 2.0))
         XCTAssertTrue(listButton.exists)
         listButton.tap()

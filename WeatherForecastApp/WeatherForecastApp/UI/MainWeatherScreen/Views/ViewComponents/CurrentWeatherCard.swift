@@ -42,12 +42,12 @@ struct CurrentWeatherCard: View {
                 .foregroundColor(.white)
                 .accessibilityIdentifier("MainViewWeatherDescription")
         }
-        .accessibilityIdentifier("CurrentWeatherCard")
         .padding(.vertical, 20)
         .padding(.horizontal)
         .frame(maxWidth: .infinity)
         .background(Color.white.opacity(0.15))
         .cornerRadius(20)
         .padding(.horizontal)
+        .accessibilityIdentifier("currentWeatherCardIdentifier")
     }
 }

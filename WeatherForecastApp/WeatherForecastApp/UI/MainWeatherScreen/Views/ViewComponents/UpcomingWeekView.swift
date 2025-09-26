@@ -36,7 +36,6 @@ struct UpcomingWeekView: View {
                         NavigationLink(destination: goToDetails(forecast.dayTime)) {
                             DailyForecastRow(forecast: forecast)
                         }
-                        .buttonStyle(PlainButtonStyle())
                         .accessibilityIdentifier("ListButton")
                         
                         if forecast.id != dailyForecasts.last?.id {

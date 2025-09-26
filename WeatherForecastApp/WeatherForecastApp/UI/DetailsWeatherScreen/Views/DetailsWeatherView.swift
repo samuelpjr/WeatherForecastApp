@@ -45,7 +45,10 @@ struct DetailsWeatherView: View {
                         .multilineTextAlignment(.center)
                         .padding()
                     Button("Retry") {
-                        viewModel.fetchData()
+                        Task {
+                            
+                          await  viewModel.fetchData()
+                        }
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.white)
@@ -54,7 +57,7 @@ struct DetailsWeatherView: View {
             }
         }
         .task {
-            viewModel.fetchData(cityLocation)
+            await viewModel.fetchData(cityLocation)
         }
     }
 }

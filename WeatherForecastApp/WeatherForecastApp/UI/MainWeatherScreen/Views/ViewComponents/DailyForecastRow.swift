@@ -37,3 +37,8 @@ struct DailyForecastRow: View {
         .padding(.horizontal, 20)
     }
 }
+
+#Preview {
+    let vm = DailyForecastItemViewModel(dayOfWeek: "Mon", dateString: "", minTemperature: "10", maxTemperature: "30", weatherIconName: "sun.max.fill", dayTime: 4)
+    DailyForecastRow(forecast: vm)
+}
