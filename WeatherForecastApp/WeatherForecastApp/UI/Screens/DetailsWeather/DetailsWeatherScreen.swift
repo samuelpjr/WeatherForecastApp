@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-struct DetailsWeatherView: View {
+struct DetailsWeatherScreen: View {
     
     @State var viewModel: DetailsWeatherViewModel
     @Binding var cityLocation: (lat: Double, lon: Double)?

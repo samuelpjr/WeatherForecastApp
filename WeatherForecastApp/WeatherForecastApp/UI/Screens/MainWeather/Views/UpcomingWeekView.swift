@@ -10,10 +10,10 @@ import SwiftUI
 struct UpcomingWeekView: View {
     
     @State var dailyForecasts: [DailyForecastItemViewModel]
-    @State var useCase: GetWeatherUseCase
+    @State var useCase: WeatherRepository
     @Binding var locale: (lat: Double, lon: Double)?
     
-    init(dailyForecasts: [DailyForecastItemViewModel], useCase: GetWeatherUseCase, locale: Binding<(lat: Double, lon: Double)?>) {
+    init(dailyForecasts: [DailyForecastItemViewModel], useCase: WeatherRepository, locale: Binding<(lat: Double, lon: Double)?>) {
         self.dailyForecasts = dailyForecasts
         self.useCase = useCase
         _locale = locale
@@ -53,8 +53,8 @@ struct UpcomingWeekView: View {
         }.padding(.bottom)
     }
     
-    func goToDetails(_ dayTime: Int) -> DetailsWeatherView {
+    func goToDetails(_ dayTime: Int) -> DetailsWeatherScreen {
         let vm = DetailsWeatherViewModel(useCase: useCase, targetDay: dayTime)
-        return DetailsWeatherView(viewModel: vm, cityLocation: self.$locale)
+        return DetailsWeatherScreen(viewModel: vm, cityLocation: self.$locale)
     }
 }

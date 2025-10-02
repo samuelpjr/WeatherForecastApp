@@ -11,10 +11,9 @@ protocol APIServiceProtocol {
     @MainActor func request<T: Decodable>(endpoint: WeatherApiEndPoint) async throws -> T
 }
 
-
 class APIService: APIServiceProtocol {
     private let session: URLSession
-
+    
     init(session: URLSession = .shared) {
         self.session = session
     }
@@ -23,12 +22,17 @@ class APIService: APIServiceProtocol {
         guard let url = endpoint.url else {
             throw APIError.invalidURL
         }
-
+        
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
+        request.httpMethod = endpoint.method.rawValue
+        request.httpBody = endpoint.body
+        
+        if let headers = endpoint.headers {
+            headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+        }
+        
         let (data, response): (Data, URLResponse)
-
+        
         do {
             (data, response) = try await session.data(for: request)
         } catch {
@@ -42,13 +46,10 @@ class APIService: APIServiceProtocol {
         guard (200...299).contains(httpResponse.statusCode) else {
             throw APIError.invalidResponse(statusCode: httpResponse.statusCode)
         }
-
+        
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            return try decoder.decode(T.self, from: data)
+            return try endpoint.decoder.decode(T.self, from: data)
         } catch {
-            print("Decoding failed for \(T.self): \(error)")
             throw APIError.decodingFailed(error)
         }
     }

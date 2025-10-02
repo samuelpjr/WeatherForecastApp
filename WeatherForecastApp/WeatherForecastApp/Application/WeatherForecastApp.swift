@@ -11,17 +11,8 @@ import SwiftUI
 struct WeatherForecastApp: App {
     var body: some Scene {
         WindowGroup {
-            let view = self.makeMainView()
+            let view = AppComposer.composeMainWeatherScreen()
             view
         }
-    }
-    
-    private func makeMainView() -> MainWeatherView {
-        let apiService = APIService()
-        let productRepository = APIWeatherRepository(apiService: apiService)
-        let getCurrentWeather = GetWeatherUseCase(weatherRepository: productRepository)
-        let viewModel = MainWeatherViewModel(getCurrentWeatherUseCase: getCurrentWeather)
-        let view = MainWeatherView(viewModel: viewModel)
-        return view
     }
 }

@@ -9,15 +9,15 @@
 import XCTest
 @testable import WeatherForecastApp
 
-final class MockWeatherUseCase: GetWeatherUseCaseProtocol {
+final class MockWeatherUseCase: WeatherRepositoryProtocol {
     var shouldThrow = false
 
-    func executeCurrent(_ location: (lat: Double, lon: Double)?) async throws -> CurrentForecastModel {
+    func executeCurrentForecast(_ location: (lat: Double, lon: Double)?) async throws -> CurrentForecastModel {
         if shouldThrow { throw URLError(.badServerResponse) }
         return CurrentForecastModel(weather: [CurrentWeather(id: 123, main: "Main...", description: "Clear Sky", icon: "sun.max.fill")], main: Main(temp: 34), visibility: 5000, name: "Mock City")
     }
 
-    func executeDaily(_ location: (lat: Double, lon: Double)?) async throws -> DailyForecastModel {
+    func executeDailyForecast(_ location: (lat: Double, lon: Double)?) async throws -> DailyForecastModel {
         let dayWeather = DayliList(
             dt: Int(Date().timeIntervalSince1970),
             temp: .init(min: 10, max: 20),
@@ -28,7 +28,7 @@ final class MockWeatherUseCase: GetWeatherUseCaseProtocol {
         return DailyForecastModel(list: [dayWeather])
     }
 
-    func executeHourly(_ location: (lat: Double, lon: Double)?) async throws -> HourlyForecastModel {
+    func executeHourlyForecast(_ location: (lat: Double, lon: Double)?) async throws -> HourlyForecastModel {
         let hourly = HourlyForecastModel(list: [HourlyList(dt: Int(Date().timeIntervalSince1970), main: .init(temp: 15))])
         return hourly
     }

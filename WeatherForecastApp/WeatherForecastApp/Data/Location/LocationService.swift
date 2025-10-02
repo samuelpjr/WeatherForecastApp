@@ -10,6 +10,10 @@
 import Foundation
 import CoreLocation
 
+struct Coordinates {
+    let latitude: Double
+    let longitude: Double
+}
 
 protocol LocationServiceProtocol {
     @MainActor func getCurrentLocation() async throws -> CLLocationCoordinate2D

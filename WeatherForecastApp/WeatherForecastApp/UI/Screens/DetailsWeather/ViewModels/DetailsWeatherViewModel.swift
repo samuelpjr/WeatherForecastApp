@@ -35,10 +35,10 @@ final class DetailsWeatherViewModel {
     
     // MARK: Dependencies
     var targetDay: Int
-    private let useCase: GetWeatherUseCaseProtocol
+    private let useCase: WeatherRepositoryProtocol
     var cityLocation: (lat: Double, lon: Double)?
     
-    init(useCase: GetWeatherUseCaseProtocol, targetDay: Int) {
+    init(useCase: WeatherRepositoryProtocol, targetDay: Int) {
         self.useCase = useCase
         self.targetDay = targetDay
     }
@@ -48,9 +48,9 @@ final class DetailsWeatherViewModel {
         
         do {
             
-            let currentForecast = try await useCase.executeCurrent(cityLocation)
-            let dailyForecast = try await useCase.executeDaily(cityLocation)
-            let hourlyForecast = try await useCase.executeHourly(cityLocation)
+            let currentForecast = try await useCase.executeCurrentForecast(cityLocation)
+            let dailyForecast = try await useCase.executeDailyForecast(cityLocation)
+            let hourlyForecast = try await useCase.executeHourlyForecast(cityLocation)
             
             await populateData(currentForecast, dailyForecast, hourlyForecast)
             
@@ -97,3 +97,8 @@ final class DetailsWeatherViewModel {
 }
 
 
+struct HourlyChartDataPoint: Identifiable {
+    let id = UUID()
+    let hour: String
+    let temperature: Double
+}

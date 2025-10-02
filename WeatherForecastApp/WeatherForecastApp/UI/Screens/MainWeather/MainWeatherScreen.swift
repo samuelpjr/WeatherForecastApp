@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainWeatherView: View {
+struct MainWeatherScreen: View {
     
     @State var viewModel: MainWeatherViewModel
     @State private var searchText = ""
@@ -34,7 +34,7 @@ struct MainWeatherView: View {
                         CurrentWeatherCard(viewModel: viewModel)
                         UpcomingWeekView(
                             dailyForecasts: viewModel.dailyForecasts,
-                            useCase: viewModel.getCurrentWeatherUseCase as! GetWeatherUseCase,
+                            useCase: viewModel.getCurrentWeatherUseCase as! WeatherRepository,
                             locale: self.$locale
                         )
                     }
@@ -119,15 +119,15 @@ struct MainWeatherView: View {
 }
 
 // MARK: - Preview Provider
-struct MainWeatherView_Previews: PreviewProvider {
-    static var previews: some View {
-        
-        let apiService = APIService()
-        let productRepository = APIWeatherRepository(apiService: apiService)
-        let getCurrentWeather = GetWeatherUseCase(weatherRepository: productRepository)
-        let viewModel = MainWeatherViewModel(getCurrentWeatherUseCase: getCurrentWeather)
-        let view = MainWeatherView(viewModel: viewModel)
-        return view
-        
-    }
-}
+//struct MainWeatherView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        
+//        let apiService = APIService()
+//        let productRepository = APIWeatherRepository(apiService: apiService)
+//        let getCurrentWeather = GetWeatherUseCase(weatherRepository: productRepository)
+//        let viewModel = MainWeatherViewModel(getCurrentWeatherUseCase: getCurrentWeather)
+//        let view = MainWeatherScreen(viewModel: viewModel)
+//        return view
+//        
+//    }
+//}

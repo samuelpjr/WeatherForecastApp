@@ -27,10 +27,10 @@ final class MainWeatherViewModel {
     var viewState: ViewState = .loading
     
     // MARK: Dependencies
-    let getCurrentWeatherUseCase: GetWeatherUseCaseProtocol
+    let getCurrentWeatherUseCase: WeatherRepositoryProtocol
     var locale: (lat: Double, lon: Double)?
 
-    init(getCurrentWeatherUseCase: GetWeatherUseCaseProtocol) {
+    init(getCurrentWeatherUseCase: WeatherRepositoryProtocol) {
         self.getCurrentWeatherUseCase = getCurrentWeatherUseCase
     }
     
@@ -51,8 +51,8 @@ final class MainWeatherViewModel {
         viewState = .loading
         do {
             
-            let currentForecast = try await getCurrentWeatherUseCase.executeCurrent(cityLocation)
-            let dailyForecast = try await getCurrentWeatherUseCase.executeDaily(cityLocation)
+            let currentForecast = try await getCurrentWeatherUseCase.executeCurrentForecast(cityLocation)
+            let dailyForecast = try await getCurrentWeatherUseCase.executeDailyForecast(cityLocation)
             
             await populateData(currentForecast, dailyForecast)
             self.viewState = .loaded
@@ -86,4 +86,14 @@ final class MainWeatherViewModel {
             )
         }
     }
+}
+
+struct DailyForecastItemViewModel: Identifiable {
+    let id = UUID()
+    let dayOfWeek: String
+    let dateString: String
+    let minTemperature: String
+    let maxTemperature: String
+    let weatherIconName: String
+    let dayTime: Int
 }
